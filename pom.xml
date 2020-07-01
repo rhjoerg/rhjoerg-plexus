@@ -18,6 +18,7 @@
 	
 	<modules>
 		<module>rhjoerg-plexus-dependencies</module>
+		<module>rhjoerg-plexus-parent</module>
 	</modules>
 		
 	<url>https://github.com/rhjoerg/rhjoerg-plexus</url>

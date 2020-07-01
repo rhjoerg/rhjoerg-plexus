@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	
+	<parent>
+		<groupId>ch.rhjoerg.plexus</groupId>
+		<artifactId>rhjoerg-plexus</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	
+	<artifactId>rhjoerg-plexus-parent</artifactId>
+	<packaging>pom</packaging>	
+	<name>rhjoerg-plexus-parent</name>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>ch.rhjoerg.plexus</groupId>
+				<artifactId>rhjoerg-plexus-dependencies</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+	
+</project>
