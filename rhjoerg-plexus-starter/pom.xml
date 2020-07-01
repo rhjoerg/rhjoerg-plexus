@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	
+	<parent>
+		<groupId>ch.rhjoerg.plexus</groupId>
+		<artifactId>rhjoerg-plexus-parent</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>../rhjoerg-plexus-parent</relativePath>
+	</parent>
+	
+	<artifactId>rhjoerg-plexus-starter</artifactId>
+	<packaging>jar</packaging>
+	<name>rhjoerg-plexus-starter</name>
+	
+	<dependencies>
+	
+		<dependency>
+			<groupId>ch.rhjoerg</groupId>
+			<artifactId>rhjoerg-java-commons</artifactId>
+		</dependency>
+	
+		<!-- https://mvnrepository.com/artifact/com.google.inject/guice -->
+		<dependency>
+			<groupId>com.google.inject</groupId>
+			<artifactId>guice</artifactId>
+			<classifier>no_aop</classifier>
+		</dependency>
+
+		<!-- org.eclipse.sisu -->
+		
+		<dependency>
+			<groupId>org.eclipse.sisu</groupId>
+			<artifactId>org.eclipse.sisu.plexus</artifactId>
+		</dependency>
+	
+		<!-- TEST -->
+		
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter</artifactId>
+			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-junit-jupiter</artifactId>
+			<scope>test</scope>
+		</dependency>
+	
+	</dependencies>
+
+</project>
