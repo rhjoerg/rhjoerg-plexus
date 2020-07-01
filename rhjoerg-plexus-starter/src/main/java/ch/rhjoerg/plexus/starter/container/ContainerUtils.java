@@ -2,8 +2,10 @@ package ch.rhjoerg.plexus.starter.container;
 
 import static ch.rhjoerg.commons.annotation.Annotations.findAnnotations;
 import static ch.rhjoerg.commons.tool.ClassLoaders.contextClassLoader;
+import static ch.rhjoerg.plexus.starter.container.ConfigurationUtils.discoverPlexusPackages;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.codehaus.plexus.ContainerConfiguration;
@@ -74,10 +76,10 @@ public interface ContainerUtils
 		return packages;
 	}
 
-	public static Module[] plexusStarterModules(ContainerConfiguration containerConfiguration, Class<?>... configurations)
+	public static Module[] plexusStarterModules(ContainerConfiguration containerConfiguration, Collection<Class<?>> configurations)
 	{
 		Module[] modules = new Module[2];
-		Iterable<String> packages = plexusStarterPackages(configurations);
+		Iterable<String> packages = discoverPlexusPackages(configurations);
 
 		modules[0] = new StarterModule();
 		modules[1] = new ScannerModule(containerConfiguration, packages);
@@ -85,11 +87,16 @@ public interface ContainerUtils
 		return modules;
 	}
 
-	public static DefaultPlexusContainer plexusStarterContainer(Class<?>... configurations) throws Exception
+	public static DefaultPlexusContainer plexusStarterContainer(Collection<Class<?>> configurations) throws Exception
 	{
 		ContainerConfiguration containerConfiguration = plexusStarterConfiguration();
 		Module[] modules = plexusStarterModules(containerConfiguration, configurations);
 
 		return new DefaultPlexusContainer(containerConfiguration, modules);
+	}
+
+	public static DefaultPlexusContainer plexusStarterContainer(Class<?>... configurations) throws Exception
+	{
+		return plexusStarterContainer(List.of(configurations));
 	}
 }

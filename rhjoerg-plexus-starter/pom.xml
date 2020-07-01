@@ -19,7 +19,7 @@
 	<dependencies>
 	
 		<dependency>
-			<groupId>ch.rhjoerg</groupId>
+			<groupId>ch.rhjoerg.java</groupId>
 			<artifactId>rhjoerg-java-commons</artifactId>
 		</dependency>
 	

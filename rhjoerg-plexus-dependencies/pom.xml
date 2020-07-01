@@ -17,6 +17,10 @@
 	
 	<properties>
 	
+		<!-- ch.rhjoerg.java -->
+		
+		<rhjoerg-java-commons.version>0.0.1-SNAPSHOT</rhjoerg-java-commons.version>
+	
 		<!-- com.google.inject -->
 		<guice.version>4.2.3</guice.version>
 	
@@ -47,6 +51,12 @@
 				<version>0.0.1-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>import</scope>
+			</dependency>
+			
+			<dependency>
+				<groupId>ch.rhjoerg.java</groupId>
+				<artifactId>rhjoerg-java-commons</artifactId>
+				<version>${rhjoerg-java-commons.version}</version>
 			</dependency>
 			
 			<!-- com.google.inject -->
