@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	
+	<parent>
+		<groupId>ch.rhjoerg.plexus</groupId>
+		<artifactId>rhjoerg-plexus</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	
+	<artifactId>rhjoerg-plexus-dependencies</artifactId>
+	<packaging>pom</packaging>
+	<name>rhjoerg-plexus-dependencies</name>
+	
+	<properties>
+	
+		<!-- com.google.inject -->
+		<guice.version>4.2.3</guice.version>
+	
+		<!-- org.codehaus.plexus -->
+	
+		<!-- https://mvnrepository.com/artifact/org.codehaus.plexus/plexus-classworlds -->
+		<plexus-classworlds.version>2.6.0</plexus-classworlds.version>
+
+		<!-- https://mvnrepository.com/artifact/org.codehaus.plexus/plexus-component-annotations -->
+		<plexus-component-annotations.version>2.1.0</plexus-component-annotations.version>
+	
+		<!-- https://mvnrepository.com/artifact/org.codehaus.plexus/plexus-utils -->
+		<plexus-utils.version>3.3.0</plexus-utils.version>
+
+		<!-- org.eclipse.sisu -->
+	
+		<!-- https://mvnrepository.com/artifact/org.eclipse.sisu/org.eclipse.sisu.plexus -->
+		<org.eclipse.sisu.plexus.version>0.3.4</org.eclipse.sisu.plexus.version>
+		
+	</properties>
+		
+	<dependencyManagement>
+		<dependencies>
+		
+			<dependency>
+				<groupId>ch.rhjoerg.java</groupId>
+				<artifactId>rhjoerg-java-dependencies</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			
+			<!-- com.google.inject -->
+			
+			<dependency>
+				<groupId>com.google.inject</groupId>
+				<artifactId>guice</artifactId>
+				<classifier>no_aop</classifier>
+				<version>${guice.version}</version>
+			</dependency>
+			
+			<!-- org.codehaus.plexus -->
+			
+			<dependency>
+				<groupId>org.codehaus.plexus</groupId>
+				<artifactId>plexus-classworlds</artifactId>
+				<version>${plexus-classworlds.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.codehaus.plexus</groupId>
+				<artifactId>plexus-component-annotations</artifactId>
+				<version>${plexus-component-annotations.version}</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>org.codehaus.plexus</groupId>
+				<artifactId>plexus-utils</artifactId>
+				<version>${plexus-utils.version}</version>
+			</dependency>
+
+			<!-- org.eclipse.sisu -->
+			
+			<dependency>
+				<groupId>org.eclipse.sisu</groupId>
+				<artifactId>org.eclipse.sisu.plexus</artifactId>
+				<version>${org.eclipse.sisu.plexus.version}</version>
+			</dependency>
+			
+		</dependencies>
+	</dependencyManagement>
+	
+</project>

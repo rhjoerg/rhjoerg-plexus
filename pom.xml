@@ -17,6 +17,7 @@
 	<name>rhjoerg-plexus</name>
 	
 	<modules>
+		<module>rhjoerg-plexus-dependencies</module>
 	</modules>
 		
 	<url>https://github.com/rhjoerg/rhjoerg-plexus</url>
