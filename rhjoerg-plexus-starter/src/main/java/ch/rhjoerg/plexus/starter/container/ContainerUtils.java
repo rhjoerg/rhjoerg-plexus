@@ -48,40 +48,48 @@ public interface ContainerUtils
 		return configuration;
 	}
 
-	public static List<String> plexusStarterPackages(Class<?> applicationType)
+	public static List<String> plexusStarterPackages(Class<?>... configurations)
 	{
-		List<PlexusPackages> annotations = findAnnotations(PlexusPackages.class, applicationType);
 		List<String> packages = new ArrayList<String>();
 
-		for (PlexusPackages annotation : annotations)
+		for (Class<?> configuration : configurations)
 		{
-			packages.addAll(List.of(annotation.value()));
-		}
+			List<PlexusPackages> annotations = findAnnotations(PlexusPackages.class, configuration);
+			boolean changed = false;
 
-		if (packages.isEmpty())
-		{
-			packages.add(applicationType.getPackageName());
+			for (PlexusPackages annotation : annotations)
+			{
+				if (packages.addAll(List.of(annotation.value())))
+				{
+					changed = true;
+				}
+			}
+
+			if (!changed)
+			{
+				packages.add(configuration.getPackageName());
+			}
 		}
 
 		return packages;
 	}
 
-	public static Module[] plexusStarterModules(ContainerConfiguration configuration, Class<?> applicationType)
+	public static Module[] plexusStarterModules(ContainerConfiguration containerConfiguration, Class<?>... configurations)
 	{
 		Module[] modules = new Module[2];
-		Iterable<String> packages = plexusStarterPackages(applicationType);
+		Iterable<String> packages = plexusStarterPackages(configurations);
 
 		modules[0] = new StarterModule();
-		modules[1] = new ScannerModule(configuration, packages);
+		modules[1] = new ScannerModule(containerConfiguration, packages);
 
 		return modules;
 	}
 
-	public static DefaultPlexusContainer plexusStarterContainer(Class<?> applicationType) throws Exception
+	public static DefaultPlexusContainer plexusStarterContainer(Class<?>... configurations) throws Exception
 	{
-		ContainerConfiguration configuration = plexusStarterConfiguration();
-		Module[] modules = plexusStarterModules(configuration, applicationType);
+		ContainerConfiguration containerConfiguration = plexusStarterConfiguration();
+		Module[] modules = plexusStarterModules(containerConfiguration, configurations);
 
-		return new DefaultPlexusContainer(configuration, modules);
+		return new DefaultPlexusContainer(containerConfiguration, modules);
 	}
 }
