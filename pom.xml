@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	
+	<parent>
+		<groupId>ch.rhjoerg.java</groupId>
+		<artifactId>rhjoerg-java</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	
+	<groupId>ch.rhjoerg.plexus</groupId>
+	<artifactId>rhjoerg-plexus</artifactId>
+	<packaging>pom</packaging>	
+	<name>rhjoerg-plexus</name>
+	
+	<modules>
+	</modules>
+		
+	<url>https://github.com/rhjoerg/rhjoerg-plexus</url>
+
+	<issueManagement>
+		<url>https://github.com/rhjoerg/rhjoerg-plexus/issues</url>
+		<system>GitHub Issues</system>
+	</issueManagement>
+
+	<licenses>
+		<license>
+			<name>MIT License</name>
+			<url>https://github.com/rhjoerg/rhjoerg-plexus/blob/master/LICENSE</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<scm>
+		<url>https://github.com/rhjoerg/rhjoerg-plexus</url>
+		<connection>scm:git:git://github.com/rhjoerg/rhjoerg-plexus.git</connection>
+		<developerConnection>scm:git:git@github.com:rhjoerg/rhjoerg-plexus.git</developerConnection>
+	</scm>
+	
+</project>
