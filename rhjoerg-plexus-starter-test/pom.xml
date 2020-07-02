@@ -19,6 +19,12 @@
 	<dependencies>
 	
 		<dependency>
+			<groupId>ch.rhjoerg.plexus</groupId>
+			<artifactId>rhjoerg-plexus-starter</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+	
+		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter</artifactId>
 		</dependency>
