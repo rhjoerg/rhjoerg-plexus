@@ -3,6 +3,9 @@ package ch.rhjoerg.plexus.starter.test;
 import static ch.rhjoerg.commons.reflect.Classes.walkClassTree;
 import static ch.rhjoerg.plexus.starter.container.ContainerUtils.plexusStarterContainer;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.codehaus.plexus.DefaultPlexusContainer;
 import org.junit.jupiter.api.extension.AfterAllCallback;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
@@ -25,8 +28,8 @@ public class PlexusExtension implements BeforeAllCallback, BeforeEachCallback, A
 	@Override
 	public void beforeAll(ExtensionContext context) throws Exception
 	{
-		Class<?> configurationClass = discoverConfigurationClass(context);
-		DefaultPlexusContainer container = plexusStarterContainer(configurationClass);
+		Class<?>[] configurationClasses = discoverConfigurationClasses(context);
+		DefaultPlexusContainer container = plexusStarterContainer(configurationClasses);
 		Store store = context.getStore(NAMESPACE);
 
 		store.put(CONTAINER_KEY, container);
@@ -56,51 +59,54 @@ public class PlexusExtension implements BeforeAllCallback, BeforeEachCallback, A
 		injector.injectMembers(context.getRequiredTestInstance());
 	}
 
-	private Class<?> discoverConfigurationClass(ExtensionContext context)
+	private Class<?>[] discoverConfigurationClasses(ExtensionContext context)
 	{
 		Class<?> testClass = context.getRequiredTestClass();
 		DiscoverConfigurationClassVisitor visitor = new DiscoverConfigurationClassVisitor();
 
 		walkClassTree(testClass, visitor);
 
-		return visitor.result == null ? testClass : visitor.result;
+		if (visitor.result.isEmpty())
+		{
+			visitor.result.add(testClass);
+		}
+
+		return visitor.result.toArray(Class<?>[]::new);
 	}
 
 	public static class DiscoverConfigurationClassVisitor implements ClassVisitor
 	{
-		public Class<?> result;
+		public final List<Class<?>> result = new ArrayList<>();
 
 		@Override
 		public boolean enterClass(Class<?> type)
 		{
-			return result == null;
+			return result.isEmpty();
 		}
 
 		@Override
 		public boolean leaveClass(Class<?> type)
 		{
-			return result == null;
+			return result.isEmpty();
 		}
 
 		@Override
 		public boolean visitClass(Class<?> type)
 		{
-			if (hasRequiredAnnotation(type))
+			PlexusConfigurations configs = type.getAnnotation(PlexusConfigurations.class);
+			WithPlexus withPlexus = type.getAnnotation(WithPlexus.class);
+
+			if (configs != null)
 			{
-				result = type;
+				result.addAll(List.of(configs.value()));
 			}
 
-			return result == null;
-		}
-
-		private boolean hasRequiredAnnotation(Class<?> type)
-		{
-			if (type.isAnnotationPresent(PlexusConfigurations.class))
+			if (withPlexus != null)
 			{
-				return true;
+				result.addAll(List.of(withPlexus.value()));
 			}
 
-			return false;
+			return result.isEmpty();
 		}
 	}
 }
