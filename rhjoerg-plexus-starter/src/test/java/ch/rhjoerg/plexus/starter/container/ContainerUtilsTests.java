@@ -1,7 +1,7 @@
 package ch.rhjoerg.plexus.starter.container;
 
 import static ch.rhjoerg.commons.tool.ClassLoaders.contextClassLoader;
-import static ch.rhjoerg.plexus.starter.container.ContainerUtils.plexusStarterClassLoader;
+import static ch.rhjoerg.plexus.starter.container.ContainerFactory.plexusStarterClassLoader;
 import static java.util.Collections.list;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

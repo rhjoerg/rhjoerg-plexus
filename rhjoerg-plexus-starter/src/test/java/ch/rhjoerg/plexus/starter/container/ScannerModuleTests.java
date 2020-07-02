@@ -1,6 +1,6 @@
 package ch.rhjoerg.plexus.starter.container;
 
-import static ch.rhjoerg.plexus.starter.container.ContainerUtils.plexusStarterContainer;
+import static ch.rhjoerg.plexus.starter.container.ContainerFactory.plexusStarterContainer;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.codehaus.plexus.DefaultPlexusContainer;

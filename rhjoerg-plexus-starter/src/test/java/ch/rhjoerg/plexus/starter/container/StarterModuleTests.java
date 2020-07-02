@@ -1,6 +1,6 @@
 package ch.rhjoerg.plexus.starter.container;
 
-import static ch.rhjoerg.plexus.starter.container.ContainerUtils.plexusStarterContainer;
+import static ch.rhjoerg.plexus.starter.container.ContainerFactory.plexusStarterContainer;
 
 import org.codehaus.plexus.DefaultPlexusContainer;
 import org.codehaus.plexus.component.configurator.ComponentConfigurator;

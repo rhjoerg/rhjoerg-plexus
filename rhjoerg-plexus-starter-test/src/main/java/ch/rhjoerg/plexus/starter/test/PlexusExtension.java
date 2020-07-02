@@ -1,7 +1,7 @@
 package ch.rhjoerg.plexus.starter.test;
 
 import static ch.rhjoerg.commons.reflect.Classes.walkClassTree;
-import static ch.rhjoerg.plexus.starter.container.ContainerUtils.plexusStarterContainer;
+import static ch.rhjoerg.plexus.starter.container.ContainerFactory.plexusStarterContainer;
 
 import java.util.ArrayList;
 import java.util.List;

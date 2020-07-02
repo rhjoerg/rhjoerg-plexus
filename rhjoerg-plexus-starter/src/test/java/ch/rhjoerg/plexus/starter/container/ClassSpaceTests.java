@@ -1,7 +1,7 @@
 package ch.rhjoerg.plexus.starter.container;
 
 import static ch.rhjoerg.commons.tool.ClassLoaders.contextClassLoader;
-import static ch.rhjoerg.plexus.starter.container.ContainerUtils.plexusStarterContainer;
+import static ch.rhjoerg.plexus.starter.container.ContainerFactory.plexusStarterContainer;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

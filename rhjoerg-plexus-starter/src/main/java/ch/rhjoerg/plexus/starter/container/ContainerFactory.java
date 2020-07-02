@@ -18,7 +18,7 @@ import com.google.inject.Module;
 import ch.rhjoerg.commons.tool.ExcludingClassLoader;
 import ch.rhjoerg.plexus.starter.PlexusPackages;
 
-public interface ContainerUtils
+public interface ContainerFactory
 {
 	public final static String PLEXUS_STARTER_REALM_ID = "plexus.starter";
 
