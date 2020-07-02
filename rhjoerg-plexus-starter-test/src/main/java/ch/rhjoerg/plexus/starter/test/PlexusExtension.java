@@ -62,7 +62,7 @@ public class PlexusExtension implements BeforeAllCallback, BeforeEachCallback, A
 	private Class<?>[] discoverConfigurationClasses(ExtensionContext context)
 	{
 		Class<?> testClass = context.getRequiredTestClass();
-		DiscoverConfigurationClassVisitor visitor = createClassVisitor(context);
+		PlexusTestConfigurationClassVisitor visitor = createClassVisitor(context);
 
 		walkClassTree(testClass, visitor);
 
@@ -74,12 +74,12 @@ public class PlexusExtension implements BeforeAllCallback, BeforeEachCallback, A
 		return visitor.result.toArray(Class<?>[]::new);
 	}
 
-	protected DiscoverConfigurationClassVisitor createClassVisitor(ExtensionContext context)
+	protected PlexusTestConfigurationClassVisitor createClassVisitor(ExtensionContext context)
 	{
-		return new DiscoverConfigurationClassVisitor();
+		return new PlexusTestConfigurationClassVisitor();
 	}
 
-	public static class DiscoverConfigurationClassVisitor implements ClassVisitor
+	public static class PlexusTestConfigurationClassVisitor implements ClassVisitor
 	{
 		public final List<Class<?>> result = new ArrayList<>();
 
