@@ -36,6 +36,13 @@
 			<groupId>org.eclipse.sisu</groupId>
 			<artifactId>org.eclipse.sisu.plexus</artifactId>
 		</dependency>
+		
+		<!-- org.slf4j -->
+		
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+		</dependency>
 	
 		<!-- TEST -->
 		
