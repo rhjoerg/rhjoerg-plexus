@@ -1,5 +1,6 @@
 package ch.rhjoerg.plexus.starter.container;
 
+import static ch.rhjoerg.commons.Exceptions.notYetImplemented;
 import static ch.rhjoerg.commons.tool.ClassLoaders.contextClassLoader;
 import static com.google.inject.name.Names.named;
 import static org.codehaus.plexus.PlexusConstants.PLEXUS_KEY;
@@ -172,115 +173,115 @@ public class StarterPlexusContainer implements MutablePlexusContainer
 	@Override
 	public List<Object> lookupList(String role) throws ComponentLookupException
 	{
-		throw new UnsupportedOperationException("not yet implemented.");
+		throw notYetImplemented();
 	}
 
 	@Override
 	public <T> List<T> lookupList(Class<T> role) throws ComponentLookupException
 	{
-		throw new UnsupportedOperationException("not yet implemented.");
+		throw notYetImplemented();
 	}
 
 	@Override
 	public Map<String, Object> lookupMap(String role) throws ComponentLookupException
 	{
-		throw new UnsupportedOperationException("not yet implemented.");
+		throw notYetImplemented();
 	}
 
 	@Override
 	public <T> Map<String, T> lookupMap(Class<T> role) throws ComponentLookupException
 	{
-		throw new UnsupportedOperationException("not yet implemented.");
+		throw notYetImplemented();
 	}
 
 	@Override
 	public boolean hasComponent(String role)
 	{
-		throw new UnsupportedOperationException("not yet implemented.");
+		throw notYetImplemented();
 	}
 
 	@Override
 	public boolean hasComponent(String role, String hint)
 	{
-		throw new UnsupportedOperationException("not yet implemented.");
+		throw notYetImplemented();
 	}
 
 	@Override
 	public boolean hasComponent(Class<?> role)
 	{
-		throw new UnsupportedOperationException("not yet implemented.");
+		throw notYetImplemented();
 	}
 
 	@Override
 	public boolean hasComponent(Class<?> role, String hint)
 	{
-		throw new UnsupportedOperationException("not yet implemented.");
+		throw notYetImplemented();
 	}
 
 	@Override
 	public boolean hasComponent(Class<?> type, String role, String hint)
 	{
-		throw new UnsupportedOperationException("not yet implemented.");
+		throw notYetImplemented();
 	}
 
 	@Override
 	public void addComponent(Object component, String role)
 	{
-		throw new UnsupportedOperationException("not yet implemented.");
+		throw notYetImplemented();
 	}
 
 	@Override
 	public <T> void addComponent(T component, Class<?> role, String hint)
 	{
-		throw new UnsupportedOperationException("not yet implemented.");
+		throw notYetImplemented();
 	}
 
 	@Override
 	public <T> void addComponentDescriptor(ComponentDescriptor<T> descriptor) throws CycleDetectedInComponentGraphException
 	{
-		throw new UnsupportedOperationException("not yet implemented.");
+		throw notYetImplemented();
 	}
 
 	@Override
 	public ComponentDescriptor<?> getComponentDescriptor(String role, String hint)
 	{
-		throw new UnsupportedOperationException("not yet implemented.");
+		throw notYetImplemented();
 	}
 
 	@Override
 	public <T> ComponentDescriptor<T> getComponentDescriptor(Class<T> type, String role, String hint)
 	{
-		throw new UnsupportedOperationException("not yet implemented.");
+		throw notYetImplemented();
 	}
 
 	@Override
 	public List<ComponentDescriptor<?>> getComponentDescriptorList(String role)
 	{
-		throw new UnsupportedOperationException("not yet implemented.");
+		throw notYetImplemented();
 	}
 
 	@Override
 	public <T> List<ComponentDescriptor<T>> getComponentDescriptorList(Class<T> type, String role)
 	{
-		throw new UnsupportedOperationException("not yet implemented.");
+		throw notYetImplemented();
 	}
 
 	@Override
 	public Map<String, ComponentDescriptor<?>> getComponentDescriptorMap(String role)
 	{
-		throw new UnsupportedOperationException("not yet implemented.");
+		throw notYetImplemented();
 	}
 
 	@Override
 	public <T> Map<String, ComponentDescriptor<T>> getComponentDescriptorMap(Class<T> type, String role)
 	{
-		throw new UnsupportedOperationException("not yet implemented.");
+		throw notYetImplemented();
 	}
 
 	@Override
 	public List<ComponentDescriptor<?>> discoverComponents(ClassRealm classRealm) throws PlexusConfigurationException
 	{
-		throw new UnsupportedOperationException("not yet implemented.");
+		throw notYetImplemented();
 	}
 
 	private <T> Iterable<PlexusBean<T>> locate(final String role, final Class<T> type, final String... hints)
@@ -325,25 +326,25 @@ public class StarterPlexusContainer implements MutablePlexusContainer
 	@Override
 	public ClassRealm createChildRealm(String id)
 	{
-		throw new UnsupportedOperationException("not yet implemented.");
+		throw notYetImplemented();
 	}
 
 	@Override
 	public void release(Object component) throws ComponentLifecycleException
 	{
-		throw new UnsupportedOperationException("not yet implemented.");
+		throw notYetImplemented();
 	}
 
 	@Override
 	public void releaseAll(Map<String, ?> components) throws ComponentLifecycleException
 	{
-		throw new UnsupportedOperationException("not yet implemented.");
+		throw notYetImplemented();
 	}
 
 	@Override
 	public void releaseAll(List<?> components) throws ComponentLifecycleException
 	{
-		throw new UnsupportedOperationException("not yet implemented.");
+		throw notYetImplemented();
 	}
 
 	@Override
