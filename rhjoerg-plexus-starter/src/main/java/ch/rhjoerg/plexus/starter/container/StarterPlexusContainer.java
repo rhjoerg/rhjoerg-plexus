@@ -7,9 +7,14 @@ import static org.codehaus.plexus.PlexusConstants.PLEXUS_KEY;
 import static org.codehaus.plexus.PlexusConstants.REALM_VISIBILITY;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.inject.Provider;
@@ -52,8 +57,10 @@ import org.eclipse.sisu.plexus.PlexusXmlBeanConverter;
 import org.eclipse.sisu.space.BeanScanning;
 import org.eclipse.sisu.space.LoadedClass;
 import org.eclipse.sisu.wire.ParameterKeys;
+import org.eclipse.sisu.wire.WireModule;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Key;
 import com.google.inject.Module;
@@ -125,6 +132,8 @@ public class StarterPlexusContainer implements MutablePlexusContainer
 		Collections.addAll(modules, customModules);
 		modules.add(new PlexusBindingModule(plexusBeanManager, List.of()));
 		modules.add(new DefaultsModule());
+
+		Guice.createInjector(new WireModule(modules));
 	}
 
 	@Override
@@ -284,7 +293,14 @@ public class StarterPlexusContainer implements MutablePlexusContainer
 		throw notYetImplemented();
 	}
 
-	private <T> Iterable<PlexusBean<T>> locate(final String role, final Class<T> type, final String... hints)
+	private static <T> boolean hasPlexusBeans(Iterable<PlexusBean<T>> beans)
+	{
+		Iterator<PlexusBean<T>> i = beans.iterator();
+
+		return i.hasNext() && i.next().getImplementationClass() != null;
+	}
+
+	private <T> Iterable<PlexusBean<T>> locate(String role, Class<T> type, String... hints)
 	{
 		if (disposing)
 		{
@@ -298,7 +314,75 @@ public class StarterPlexusContainer implements MutablePlexusContainer
 			return plexusBeanLocator.locate(TypeLiteral.get(type), canonicalHints);
 		}
 
-		throw new UnsupportedOperationException("not yet implemented.");
+		Set<Class<?>> candidates = new HashSet<>();
+
+		for (ClassRealm realm : getVisibleRealms())
+		{
+			try
+			{
+				@SuppressWarnings("unchecked")
+				Class<T> clazz = (Class<T>) realm.loadClass(role);
+
+				if (candidates.add(clazz))
+				{
+					Iterable<PlexusBean<T>> beans = plexusBeanLocator.locate(TypeLiteral.get(clazz), canonicalHints);
+
+					if (hasPlexusBeans((Iterable<PlexusBean<T>>) beans))
+					{
+						return beans;
+					}
+				}
+			}
+			catch (Exception | LinkageError e)
+			{
+				// TODO: handle exception
+			}
+		}
+
+		return List.of();
+	}
+
+	private Iterable<ClassRealm> getVisibleRealms()
+	{
+		Object[] realms = getClassWorld().getRealms().toArray();
+		Set<ClassRealm> visibleRealms = new LinkedHashSet<ClassRealm>(realms.length);
+		ClassRealm currentLookupRealm = getLookupRealm();
+
+		if (currentLookupRealm != null)
+		{
+			visibleRealms.add(currentLookupRealm);
+		}
+
+		ClassRealm threadContextRealm = ClassRealmManager.contextRealm();
+
+		if (threadContextRealm != null)
+		{
+			visibleRealms.add(threadContextRealm);
+		}
+
+		Collection<String> realmNames = ClassRealmManager.visibleRealmNames(threadContextRealm);
+
+		if ((realmNames != null) && realmNames.size() > 0)
+		{
+			for (int i = realms.length - 1; i >= 0; --i)
+			{
+				ClassRealm realm = (ClassRealm) realms[i];
+
+				if (realmNames.contains(realm.toString()))
+				{
+					visibleRealms.add(realm);
+				}
+			}
+
+			return visibleRealms;
+		}
+
+		for (int i = realms.length - 1; i >= 0; --i)
+		{
+			visibleRealms.add((ClassRealm) realms[i]);
+		}
+
+		return visibleRealms;
 	}
 
 	@Override
@@ -459,16 +543,20 @@ public class StarterPlexusContainer implements MutablePlexusContainer
 		{
 			binder().requireExplicitBindings();
 
+			bind(ExcludingClassLoader.class).toInstance(excludingClassLoader);
+
 			bind(Context.class).toInstance(context);
 			bind(ParameterKeys.PROPERTIES).toInstance(context.getContextData());
+
+			Provider<StarterPlexusContainer> containerProvider = Providers.of(StarterPlexusContainer.this);
+
+			bind(PlexusContainer.class).toProvider(containerProvider);
+			bind(MutablePlexusContainer.class).toProvider(containerProvider);
+			bind(StarterPlexusContainer.class).toProvider(containerProvider);
 
 			bind(MutableBeanLocator.class).toInstance(qualifiedBeanLocator);
 			bind(PlexusBeanLocator.class).toInstance(plexusBeanLocator);
 			bind(BeanManager.class).toInstance(plexusBeanManager);
-
-			bind(PlexusContainer.class).to(MutablePlexusContainer.class);
-			bind(MutablePlexusContainer.class).to(StarterPlexusContainer.class);
-			bind(StarterPlexusContainer.class).toProvider(Providers.of(StarterPlexusContainer.this));
 		}
 	}
 
