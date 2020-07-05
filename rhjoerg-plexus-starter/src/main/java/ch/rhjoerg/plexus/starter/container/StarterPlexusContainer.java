@@ -56,6 +56,8 @@ import org.eclipse.sisu.plexus.PlexusLifecycleManager;
 import org.eclipse.sisu.plexus.PlexusXmlBeanConverter;
 import org.eclipse.sisu.space.BeanScanning;
 import org.eclipse.sisu.space.LoadedClass;
+import org.eclipse.sisu.wire.EntryListAdapter;
+import org.eclipse.sisu.wire.EntryMapAdapter;
 import org.eclipse.sisu.wire.ParameterKeys;
 import org.eclipse.sisu.wire.WireModule;
 
@@ -183,55 +185,55 @@ public class StarterPlexusContainer implements MutablePlexusContainer
 	@Override
 	public List<Object> lookupList(String role) throws ComponentLookupException
 	{
-		throw notYetImplemented();
+		return new EntryListAdapter<Object>(locate(role, null));
 	}
 
 	@Override
 	public <T> List<T> lookupList(Class<T> role) throws ComponentLookupException
 	{
-		throw notYetImplemented();
+		return new EntryListAdapter<T>(locate(null, role));
 	}
 
 	@Override
 	public Map<String, Object> lookupMap(String role) throws ComponentLookupException
 	{
-		throw notYetImplemented();
+		return new EntryMapAdapter<String, Object>(locate(role, null));
 	}
 
 	@Override
 	public <T> Map<String, T> lookupMap(Class<T> role) throws ComponentLookupException
 	{
-		throw notYetImplemented();
+		return new EntryMapAdapter<String, T>(locate(null, role));
 	}
 
 	@Override
 	public boolean hasComponent(String role)
 	{
-		throw notYetImplemented();
+		return hasComponent(role, "");
 	}
 
 	@Override
 	public boolean hasComponent(String role, String hint)
 	{
-		throw notYetImplemented();
+		return hasComponent(null, role, hint);
 	}
 
 	@Override
 	public boolean hasComponent(Class<?> role)
 	{
-		throw notYetImplemented();
+		return hasComponent(role, "");
 	}
 
 	@Override
 	public boolean hasComponent(Class<?> role, String hint)
 	{
-		throw notYetImplemented();
+		return hasComponent(role, null, hint);
 	}
 
 	@Override
 	public boolean hasComponent(Class<?> type, String role, String hint)
 	{
-		throw notYetImplemented();
+		return hasPlexusBeans(locate(role, type, hint));
 	}
 
 	@Override
