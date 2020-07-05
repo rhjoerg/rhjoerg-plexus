@@ -1,6 +1,7 @@
 package ch.rhjoerg.plexus.starter;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -22,10 +23,10 @@ public class StarterPlexusConfiguration
 
 	private ConfigurationClassScanner configurationClassScanner = new ConfigurationClassScanner();
 
-	public StarterPlexusConfiguration(Class<?> configurationClass)
+	public StarterPlexusConfiguration(Class<?>... configurationClasses)
 	{
 		classLoaderExclusions.addAll(DEFAULT_CLASSLOADER_EXCLUSIONS);
-		configurationClasses.add(configurationClass);
+		Collections.addAll(this.configurationClasses, configurationClasses);
 	}
 
 	public StarterPlexusConfiguration addClassLoaderExlusion(String classLoaderExclusion)

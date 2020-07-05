@@ -1,7 +1,6 @@
 package ch.rhjoerg.plexus.starter.test;
 
 import static ch.rhjoerg.commons.reflect.Classes.walkClassTree;
-import static ch.rhjoerg.plexus.starter.container.ContainerFactory.plexusStarterContainer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +16,8 @@ import org.junit.jupiter.api.extension.ExtensionContext.Store;
 import com.google.inject.Injector;
 
 import ch.rhjoerg.commons.reflect.ClassVisitor;
+import ch.rhjoerg.plexus.starter.StarterPlexusConfiguration;
+import ch.rhjoerg.plexus.starter.StarterPlexusContainer;
 import ch.rhjoerg.plexus.starter.annotation.PlexusConfigurations;
 
 public class PlexusExtension implements BeforeAllCallback, BeforeEachCallback, AfterAllCallback
@@ -29,7 +30,8 @@ public class PlexusExtension implements BeforeAllCallback, BeforeEachCallback, A
 	public void beforeAll(ExtensionContext context) throws Exception
 	{
 		Class<?>[] configurationClasses = discoverConfigurationClasses(context);
-		DefaultPlexusContainer container = plexusStarterContainer(configurationClasses);
+		StarterPlexusConfiguration configuration = new StarterPlexusConfiguration(configurationClasses);
+		StarterPlexusContainer container = new StarterPlexusContainer(configuration);
 		Store store = context.getStore(NAMESPACE);
 
 		store.put(CONTAINER_KEY, container);
@@ -40,7 +42,7 @@ public class PlexusExtension implements BeforeAllCallback, BeforeEachCallback, A
 	public void afterAll(ExtensionContext context) throws Exception
 	{
 		Store store = context.getStore(NAMESPACE);
-		DefaultPlexusContainer container = store.get(CONTAINER_KEY, DefaultPlexusContainer.class);
+		StarterPlexusContainer container = store.get(CONTAINER_KEY, StarterPlexusContainer.class);
 
 		store.remove(INJECTOR_KEY);
 		store.remove(CONTAINER_KEY);
