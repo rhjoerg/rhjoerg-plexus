@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-import ch.rhjoerg.plexus.starter.PlexusConfigurations;
-import ch.rhjoerg.plexus.starter.PlexusPackages;
+import ch.rhjoerg.plexus.starter.annotation.PlexusConfigurations;
+import ch.rhjoerg.plexus.starter.annotation.PlexusPackages;
 
 public interface ConfigurationUtils
 {

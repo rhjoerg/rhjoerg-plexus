@@ -1,4 +1,4 @@
-package ch.rhjoerg.plexus.starter;
+package ch.rhjoerg.plexus.starter.annotation;
 
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;

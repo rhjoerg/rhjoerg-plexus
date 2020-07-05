@@ -70,15 +70,13 @@ import com.google.inject.name.Names;
 import com.google.inject.util.Providers;
 
 import ch.rhjoerg.commons.tool.ExcludingClassLoader;
+import ch.rhjoerg.plexus.starter.StarterPlexusConfiguration;
 
 public class StarterPlexusContainer implements MutablePlexusContainer
 {
 	// See DefaultPlexusContainer for origin
 
 	public final static String STARTER_REALM_ID = "plexus.starter";
-
-	public final static List<String> STARTER_CLASSLOADER_EXCLUSIONS = //
-			List.of("META-INF/plexus/components.xml", "META-INF/sisu/javax.inject.Named");
 
 	public final static BeanScanning STARTER_BEAN_SCANNING = BeanScanning.OFF;
 	public final static String STARTER_COMPONENT_VISIBILITY = REALM_VISIBILITY;
@@ -108,12 +106,12 @@ public class StarterPlexusContainer implements MutablePlexusContainer
 
 	private boolean disposing = false;
 
-	public StarterPlexusContainer(Module... customModules)
+	public StarterPlexusContainer(StarterPlexusConfiguration configuration)
 	{
 		context = new DefaultContext();
 		context.put(PLEXUS_KEY, this);
 
-		excludingClassLoader = createClassLoader();
+		excludingClassLoader = createClassLoader(configuration);
 		containerRealm = createContainerRealm(excludingClassLoader);
 
 		classRealmManager = new ClassRealmManager(qualifiedBeanLocator);
@@ -129,7 +127,7 @@ public class StarterPlexusContainer implements MutablePlexusContainer
 		List<Module> modules = new ArrayList<Module>();
 
 		modules.add(new ContainerModule());
-		Collections.addAll(modules, customModules);
+		Collections.addAll(modules, configuration.customModules());
 		modules.add(new PlexusBindingModule(plexusBeanManager, List.of()));
 		modules.add(new DefaultsModule());
 
@@ -484,9 +482,9 @@ public class StarterPlexusContainer implements MutablePlexusContainer
 		return containerRealm.getWorld();
 	}
 
-	private static ExcludingClassLoader createClassLoader()
+	private static ExcludingClassLoader createClassLoader(StarterPlexusConfiguration configuration)
 	{
-		return new ExcludingClassLoader(contextClassLoader(), STARTER_CLASSLOADER_EXCLUSIONS);
+		return new ExcludingClassLoader(contextClassLoader(), configuration.classLoaderExclusions());
 	}
 
 	private static ClassRealm createContainerRealm(ExcludingClassLoader excludingClassLoader)

@@ -16,7 +16,7 @@ import org.codehaus.plexus.classworlds.ClassWorld;
 import com.google.inject.Module;
 
 import ch.rhjoerg.commons.tool.ExcludingClassLoader;
-import ch.rhjoerg.plexus.starter.PlexusPackages;
+import ch.rhjoerg.plexus.starter.annotation.PlexusPackages;
 
 public interface ContainerFactory
 {

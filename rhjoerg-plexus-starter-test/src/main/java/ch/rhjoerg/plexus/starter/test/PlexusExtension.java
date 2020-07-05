@@ -17,7 +17,7 @@ import org.junit.jupiter.api.extension.ExtensionContext.Store;
 import com.google.inject.Injector;
 
 import ch.rhjoerg.commons.reflect.ClassVisitor;
-import ch.rhjoerg.plexus.starter.PlexusConfigurations;
+import ch.rhjoerg.plexus.starter.annotation.PlexusConfigurations;
 
 public class PlexusExtension implements BeforeAllCallback, BeforeEachCallback, AfterAllCallback
 {
