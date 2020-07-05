@@ -71,6 +71,7 @@ import com.google.inject.util.Providers;
 
 import ch.rhjoerg.commons.tool.ExcludingClassLoader;
 import ch.rhjoerg.plexus.starter.StarterPlexusConfiguration;
+import ch.rhjoerg.plexus.starter.util.PackageScannerModule;
 
 public class StarterPlexusContainer implements MutablePlexusContainer
 {
@@ -124,9 +125,11 @@ public class StarterPlexusContainer implements MutablePlexusContainer
 
 		setLookupRealm(containerRealm);
 
+		Set<String> packages = configuration.configurationClassScanner().discoverPackages(configuration.configurationClasses());
 		List<Module> modules = new ArrayList<Module>();
 
 		modules.add(new ContainerModule());
+		modules.add(new PackageScannerModule(containerRealm, packages));
 		Collections.addAll(modules, configuration.customModules());
 		modules.add(new PlexusBindingModule(plexusBeanManager, List.of()));
 		modules.add(new DefaultsModule());

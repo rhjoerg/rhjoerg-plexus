@@ -13,7 +13,7 @@ public class StarterPlexusContainerTests
 	@Test
 	public void test() throws Exception
 	{
-		StarterPlexusConfiguration configuration = new StarterPlexusConfiguration();
+		StarterPlexusConfiguration configuration = new StarterPlexusConfiguration(StarterPlexusContainerTests.class);
 		PlexusContainer container = new StarterPlexusContainer(configuration);
 
 		assertTrue(container.getContext().get(PlexusConstants.PLEXUS_KEY) == container);

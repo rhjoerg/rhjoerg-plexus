@@ -7,6 +7,8 @@ import java.util.TreeSet;
 
 import com.google.inject.Module;
 
+import ch.rhjoerg.plexus.starter.util.ConfigurationClassScanner;
+
 public class StarterPlexusConfiguration
 {
 	public final static List<String> DEFAULT_CLASSLOADER_EXCLUSIONS = //
@@ -16,9 +18,14 @@ public class StarterPlexusConfiguration
 
 	private final List<Module> customModules = new ArrayList<>();
 
-	public StarterPlexusConfiguration()
+	private final List<Class<?>> configurationClasses = new ArrayList<>();
+
+	private ConfigurationClassScanner configurationClassScanner = new ConfigurationClassScanner();
+
+	public StarterPlexusConfiguration(Class<?> configurationClass)
 	{
 		classLoaderExclusions.addAll(DEFAULT_CLASSLOADER_EXCLUSIONS);
+		configurationClasses.add(configurationClass);
 	}
 
 	public StarterPlexusConfiguration addClassLoaderExlusion(String classLoaderExclusion)
@@ -43,5 +50,22 @@ public class StarterPlexusConfiguration
 	public Module[] customModules()
 	{
 		return customModules.toArray(Module[]::new);
+	}
+
+	public StarterPlexusConfiguration addConfigurationClass(Class<?> configurationClass)
+	{
+		configurationClasses.add(configurationClass);
+
+		return this;
+	}
+
+	public Class<?>[] configurationClasses()
+	{
+		return configurationClasses.toArray(Class<?>[]::new);
+	}
+
+	public ConfigurationClassScanner configurationClassScanner()
+	{
+		return configurationClassScanner;
 	}
 }
