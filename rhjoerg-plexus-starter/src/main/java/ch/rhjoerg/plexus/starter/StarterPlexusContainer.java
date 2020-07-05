@@ -1,4 +1,4 @@
-package ch.rhjoerg.plexus.starter.container;
+package ch.rhjoerg.plexus.starter;
 
 import static ch.rhjoerg.commons.Exceptions.notYetImplemented;
 import static ch.rhjoerg.commons.tool.ClassLoaders.contextClassLoader;
@@ -72,7 +72,6 @@ import com.google.inject.name.Names;
 import com.google.inject.util.Providers;
 
 import ch.rhjoerg.commons.tool.ExcludingClassLoader;
-import ch.rhjoerg.plexus.starter.StarterPlexusConfiguration;
 import ch.rhjoerg.plexus.starter.util.PackageScannerModule;
 
 public class StarterPlexusContainer implements MutablePlexusContainer

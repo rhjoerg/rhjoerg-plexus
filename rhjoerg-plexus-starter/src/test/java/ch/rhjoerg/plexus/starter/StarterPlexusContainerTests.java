@@ -1,12 +1,10 @@
-package ch.rhjoerg.plexus.starter.container;
+package ch.rhjoerg.plexus.starter;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.codehaus.plexus.PlexusConstants;
 import org.codehaus.plexus.PlexusContainer;
 import org.junit.jupiter.api.Test;
-
-import ch.rhjoerg.plexus.starter.StarterPlexusConfiguration;
 
 public class StarterPlexusContainerTests
 {
