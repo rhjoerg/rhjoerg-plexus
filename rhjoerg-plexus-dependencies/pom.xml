@@ -32,14 +32,28 @@
 		<!-- https://mvnrepository.com/artifact/org.codehaus.plexus/plexus-component-annotations -->
 		<plexus-component-annotations.version>2.1.0</plexus-component-annotations.version>
 	
+		<!-- https://mvnrepository.com/artifact/org.codehaus.plexus/plexus-interpolation -->
+		<plexus-interpolation.version>1.26</plexus-interpolation.version>
+
 		<!-- https://mvnrepository.com/artifact/org.codehaus.plexus/plexus-utils -->
 		<plexus-utils.version>3.3.0</plexus-utils.version>
 
 		<!-- org.eclipse.sisu -->
 	
+		<!-- https://mvnrepository.com/artifact/org.eclipse.sisu/org.eclipse.sisu.inject -->
+		<org.eclipse.sisu.inject.version>0.3.4</org.eclipse.sisu.inject.version>
+
 		<!-- https://mvnrepository.com/artifact/org.eclipse.sisu/org.eclipse.sisu.plexus -->
 		<org.eclipse.sisu.plexus.version>0.3.4</org.eclipse.sisu.plexus.version>
 		
+		<!-- org.sonatype.plexus -->
+		
+		<!-- https://mvnrepository.com/artifact/org.sonatype.plexus/plexus-cipher -->
+		<plexus-cipher.version>1.7</plexus-cipher.version>
+
+		<!-- https://mvnrepository.com/artifact/org.sonatype.plexus/plexus-sec-dispatcher -->
+		<plexus-sec-dispatcher.version>1.4</plexus-sec-dispatcher.version>
+
 	</properties>
 		
 	<dependencyManagement>
@@ -84,6 +98,12 @@
 			
 			<dependency>
 				<groupId>org.codehaus.plexus</groupId>
+				<artifactId>plexus-interpolation</artifactId>
+				<version>${plexus-interpolation.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.codehaus.plexus</groupId>
 				<artifactId>plexus-utils</artifactId>
 				<version>${plexus-utils.version}</version>
 			</dependency>
@@ -92,10 +112,30 @@
 			
 			<dependency>
 				<groupId>org.eclipse.sisu</groupId>
+				<artifactId>org.eclipse.sisu.inject</artifactId>
+				<version>${org.eclipse.sisu.inject.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.eclipse.sisu</groupId>
 				<artifactId>org.eclipse.sisu.plexus</artifactId>
 				<version>${org.eclipse.sisu.plexus.version}</version>
 			</dependency>
 			
+			<!-- org.sonatype.plexus -->
+			
+			<dependency>
+				<groupId>org.sonatype.plexus</groupId>
+				<artifactId>plexus-cipher</artifactId>
+				<version>${plexus-cipher.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.sonatype.plexus</groupId>
+				<artifactId>plexus-sec-dispatcher</artifactId>
+				<version>${plexus-sec-dispatcher.version}</version>
+			</dependency>
+
 		</dependencies>
 	</dependencyManagement>
 	
