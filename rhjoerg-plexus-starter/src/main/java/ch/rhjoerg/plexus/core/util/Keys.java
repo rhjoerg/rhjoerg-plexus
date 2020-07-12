@@ -2,12 +2,16 @@ package ch.rhjoerg.plexus.core.util;
 
 import java.lang.annotation.Annotation;
 
+import org.codehaus.plexus.component.annotations.Component;
+import org.codehaus.plexus.component.annotations.Requirement;
+
 import com.google.inject.Key;
 import com.google.inject.TypeLiteral;
 import com.google.inject.name.Names;
 import com.google.inject.spi.Dependency;
 
 import ch.rhjoerg.commons.Exceptions;
+import ch.rhjoerg.commons.function.ThrowingSupplier;
 
 public interface Keys
 {
@@ -31,6 +35,16 @@ public interface Keys
 		return key(type(dependency), name(dependency.getKey()));
 	}
 
+	public static Key<?> key(Component component, ClassLoader classLoader)
+	{
+		return key(type(component, classLoader), name(component));
+	}
+
+	public static Key<?> key(Requirement requirement)
+	{
+		return key(requirement.role(), name(requirement));
+	}
+
 	public static Class<?> type(Key<?> key)
 	{
 		TypeLiteral<?> typeLiteral = key.getTypeLiteral();
@@ -46,6 +60,11 @@ public interface Keys
 	public static Class<?> type(Dependency<?> dependency)
 	{
 		return type(dependency.getKey());
+	}
+
+	public static Class<?> type(Component component, ClassLoader classLoader)
+	{
+		return ThrowingSupplier.wrap(() -> classLoader.loadClass(component.type())).get();
 	}
 
 	public static String name(Annotation... annotations)
@@ -69,6 +88,31 @@ public interface Keys
 	public static String name(Class<?> type)
 	{
 		return name(type.getDeclaredAnnotations());
+	}
+
+	public static String name(Component component)
+	{
+		if (!component.hint().isEmpty())
+		{
+			return component.hint();
+		}
+
+		return "default";
+	}
+
+	public static String name(Requirement requirement)
+	{
+		if (!requirement.hint().isEmpty())
+		{
+			return requirement.hint();
+		}
+
+		if (requirement.hints().length > 0)
+		{
+			return requirement.hints()[0];
+		}
+
+		return "default";
 	}
 
 	public static String name(Key<?> key)

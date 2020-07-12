@@ -1,43 +1,33 @@
-package ch.rhjoerg.plexus.starter.test.component;
+package ch.rhjoerg.plexus.starter.dependency;
 
 import static ch.rhjoerg.commons.annotation.Annotations.annotationProxy;
-import static ch.rhjoerg.commons.tool.ClassLoaders.contextClassLoader;
 
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.function.BiConsumer;
 
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.component.annotations.Configuration;
 import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.util.xml.pull.MXParser;
 import org.codehaus.plexus.util.xml.pull.XmlPullParser;
-import org.eclipse.sisu.inject.DeferredClass;
 import org.eclipse.sisu.plexus.Roles;
-import org.eclipse.sisu.space.ClassSpace;
-import org.eclipse.sisu.space.URLClassSpace;
 
 public class ComponentParser
 {
-	// See PlexusXmlScanner.
-
-	private final ClassSpace space;
+	private final ClassLoader classLoader;
 
 	public ComponentParser(ClassLoader classLoader)
 	{
-		space = new URLClassSpace(classLoader);
+		this.classLoader = classLoader;
 	}
 
-	public ComponentParser()
+	public List<Descriptor> parse(String xml) throws Exception
 	{
-		this(contextClassLoader());
-	}
-
-	public List<ComponentEntry> parse(String xml) throws Exception
-	{
-		List<ComponentEntry> result = new ArrayList<>();
+		List<Descriptor> result = new ArrayList<>();
 		MXParser parser = new MXParser();
 
 		parser.setInput(new StringReader(xml));
@@ -46,7 +36,7 @@ public class ComponentParser
 		return result;
 	}
 
-	private void parse(MXParser parser, List<ComponentEntry> result) throws Exception
+	private void parse(MXParser parser, List<Descriptor> result) throws Exception
 	{
 		parser.nextTag();
 		parser.require(XmlPullParser.START_TAG, null, null);
@@ -57,7 +47,7 @@ public class ComponentParser
 		}
 	}
 
-	private void parseComponents(MXParser parser, List<ComponentEntry> result) throws Exception
+	private void parseComponents(MXParser parser, List<Descriptor> result) throws Exception
 	{
 		parser.require(XmlPullParser.START_TAG, null, "components");
 
@@ -67,12 +57,11 @@ public class ComponentParser
 		}
 	}
 
-	private void parseComponent(MXParser parser, List<ComponentEntry> result) throws Exception
+	private void parseComponent(MXParser parser, List<Descriptor> result) throws Exception
 	{
 		parser.require(XmlPullParser.START_TAG, null, "component");
 
 		Map<String, Object> values = new TreeMap<>();
-		DeferredClass<?> role = null;
 		Map<String, Requirement> requirements = new TreeMap<>();
 		Map<String, Configuration> configurations = new TreeMap<>();
 
@@ -96,23 +85,23 @@ public class ComponentParser
 			}
 			else if ("role".equals(name))
 			{
-				role = space.deferLoadClass(parser.nextText().trim());
+				values.put("role", classLoader.loadClass(text(parser)));
 			}
 			else if ("role-hint".equals(name))
 			{
-				values.put("hint", parser.nextText().trim());
+				values.put("hint", text(parser));
 			}
 			else if ("instantiation-strategy".equals(name))
 			{
-				values.put("instantiationStrategy", parser.nextText().trim());
+				values.put("instantiationStrategy", text(parser));
 			}
 			else if ("description".equals(name))
 			{
-				values.put("description", parser.nextText().trim());
+				values.put("description", text(parser));
 			}
 			else if ("implementation".equals(name))
 			{
-				values.put("type", parser.nextText().trim());
+				values.put("type", text(parser));
 			}
 			else
 			{
@@ -120,11 +109,10 @@ public class ComponentParser
 			}
 		}
 
-		ComponentHandler handler = new ComponentHandler(role, values);
-		Component component = annotationProxy(Component.class, handler);
-		ComponentEntry entry = new ComponentEntry(component, requirements, configurations);
+		Component component = annotationProxy(Component.class, values);
+		Descriptor descriptor = new Descriptor(component, requirements, configurations);
 
-		result.add(entry);
+		result.add(descriptor);
 	}
 
 	private void parseRequirement(MXParser parser, Map<String, Requirement> requirements) throws Exception
@@ -135,7 +123,6 @@ public class ComponentParser
 		List<String> hints = new ArrayList<String>();
 		String fieldName = null;
 		String roleName = null;
-		DeferredClass<?> role = null;
 
 		while (parser.nextTag() == XmlPullParser.START_TAG)
 		{
@@ -143,18 +130,18 @@ public class ComponentParser
 
 			if ("role".equals(name))
 			{
-				roleName = parser.nextText().trim();
-				role = space.deferLoadClass(roleName);
+				roleName = text(parser);
+				values.put("role", classLoader.loadClass(roleName));
 			}
 			else if ("role-hint".equals(name))
 			{
-				hints.add(parser.nextText().trim());
+				hints.add(text(parser));
 			}
 			else if ("role-hints".equals(name))
 			{
 				while (parser.nextTag() == XmlPullParser.START_TAG)
 				{
-					hints.add(parser.nextText().trim());
+					hints.add(text(parser));
 				}
 			}
 			else if ("field-name".equals(name))
@@ -185,8 +172,7 @@ public class ComponentParser
 			values.put("hint", hints.get(0));
 		}
 
-		RequirementHandler handler = new RequirementHandler(role, values);
-		Requirement requirement = annotationProxy(Requirement.class, handler);
+		Requirement requirement = annotationProxy(Requirement.class, values);
 
 		requirements.put(fieldName, requirement);
 	}
@@ -196,7 +182,6 @@ public class ComponentParser
 		String name = parser.getName();
 		String fieldName = Roles.camelizeName(name);
 		StringBuilder buf = new StringBuilder();
-
 		String header = parser.getText().trim();
 		int depth = parser.getDepth();
 
@@ -219,5 +204,40 @@ public class ComponentParser
 		Configuration configuration = annotationProxy(Configuration.class, values);
 
 		configurations.put(fieldName, configuration);
+	}
+
+	private String text(MXParser parser) throws Exception
+	{
+		return parser.nextText().trim();
+	}
+
+	public static class Descriptor
+	{
+		private final Component component;
+
+		private final Map<String, Requirement> requirements = new TreeMap<>();
+		private final Map<String, Configuration> configurations = new TreeMap<>();
+
+		public Descriptor(Component component, Map<String, Requirement> requirements, Map<String, Configuration> configurations)
+		{
+			this.component = component;
+			this.requirements.putAll(requirements);
+			this.configurations.putAll(configurations);
+		}
+
+		public Component component()
+		{
+			return component;
+		}
+
+		public void forEachRequirement(BiConsumer<String, Requirement> consumer)
+		{
+			requirements.forEach(consumer);
+		}
+
+		public void forEachConfiguration(BiConsumer<String, Configuration> consumer)
+		{
+			configurations.forEach(consumer);
+		}
 	}
 }
