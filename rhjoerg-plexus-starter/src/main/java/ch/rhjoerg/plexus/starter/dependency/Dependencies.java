@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.codehaus.plexus.PlexusContainer;
 
@@ -19,6 +20,8 @@ import ch.rhjoerg.plexus.core.util.Keys;
 
 public class Dependencies
 {
+	private final static List<Class<?>> OPTIONAL_DEPENDENCIES = List.of(Map.class, List.class, Set.class);
+
 	private final PlexusContainer container;
 	private final NamedParser namedParser;
 
@@ -44,9 +47,26 @@ public class Dependencies
 
 	private void addDependency(Entry entry, Dependency<?> dependency)
 	{
+		if (isOptional(dependency))
+		{
+			return;
+		}
+
 		Entry dependencyEntry = addEntry(Keys.key(dependency), null);
 
 		entry.dependencies.add(dependencyEntry);
+	}
+
+	private boolean isOptional(Dependency<?> dependency)
+	{
+		if (dependency.isNullable())
+		{
+			return true;
+		}
+
+		Class<?> rawType = dependency.getKey().getTypeLiteral().getRawType();
+
+		return OPTIONAL_DEPENDENCIES.stream().anyMatch(type -> type.isAssignableFrom(rawType));
 	}
 
 	private Entry addEntry(Key<?> key, URL source)
