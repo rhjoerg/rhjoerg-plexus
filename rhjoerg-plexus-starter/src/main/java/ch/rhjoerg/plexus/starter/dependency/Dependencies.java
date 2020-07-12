@@ -1,6 +1,7 @@
 package ch.rhjoerg.plexus.starter.dependency;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.util.stream.Collectors.toList;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -115,6 +116,46 @@ public class Dependencies
 		}
 
 		return entry;
+	}
+
+	public int size()
+	{
+		return entries.size();
+	}
+
+	public List<Entry> unresolvable()
+	{
+		return entries.values().stream().filter(this::unresolvable).collect(toList());
+	}
+
+	public List<Entry> resolvable()
+	{
+		return entries.values().stream().filter(this::resolvable).collect(toList());
+	}
+
+	private boolean unresolvable(Entry entry)
+	{
+		if (entry.exists)
+		{
+			return false;
+		}
+
+		if (entry.source == null)
+		{
+			return true;
+		}
+
+		return entry.dependencies.stream().anyMatch(this::unresolvable);
+	}
+
+	private boolean resolvable(Entry entry)
+	{
+		if (entry.exists || entry.source == null)
+		{
+			return false;
+		}
+
+		return entry.dependencies.stream().allMatch(e -> e.exists);
 	}
 
 	public static class Entry
