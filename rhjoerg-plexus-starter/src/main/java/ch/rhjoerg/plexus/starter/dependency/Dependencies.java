@@ -2,7 +2,6 @@ package ch.rhjoerg.plexus.starter.dependency;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-import java.lang.annotation.Annotation;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,13 +11,11 @@ import java.util.Map;
 import org.codehaus.plexus.PlexusContainer;
 
 import com.google.inject.Key;
-import com.google.inject.TypeLiteral;
-import com.google.inject.name.Names;
 import com.google.inject.spi.Dependency;
 import com.google.inject.spi.InjectionPoint;
 
-import ch.rhjoerg.commons.Exceptions;
 import ch.rhjoerg.commons.io.Read;
+import ch.rhjoerg.plexus.core.util.Keys;
 
 public class Dependencies
 {
@@ -40,9 +37,16 @@ public class Dependencies
 
 	private void addNamed(Class<?> type, URL source)
 	{
-		Entry entry = addEntry(key(type), source);
+		Entry entry = addEntry(Keys.key(type), source);
 
 		InjectionPoint.forConstructorOf(type).getDependencies().forEach(d -> addDependency(entry, d));
+	}
+
+	private void addDependency(Entry entry, Dependency<?> dependency)
+	{
+		Entry dependencyEntry = addEntry(Keys.key(dependency), null);
+
+		entry.dependencies.add(dependencyEntry);
 	}
 
 	private Entry addEntry(Key<?> key, URL source)
@@ -51,82 +55,13 @@ public class Dependencies
 
 		if (entry == null)
 		{
-			boolean exists = container.hasComponent(type(key), name(key));
+			boolean exists = container.hasComponent(Keys.type(key), Keys.name(key));
 
 			entry = new Entry(key, source, exists);
 			entries.put(key, entry);
 		}
 
 		return entry;
-	}
-
-	private void addDependency(Entry entry, Dependency<?> dependency)
-	{
-		Entry dependencyEntry = addEntry(key(dependency), null);
-
-		entry.dependencies.add(dependencyEntry);
-	}
-
-	private Key<?> key(Dependency<?> dependency)
-	{
-		return key(type(dependency), name(dependency.getKey()));
-	}
-
-	private Key<?> key(Class<?> type)
-	{
-		return key(type, name(type.getDeclaredAnnotations()));
-	}
-
-	private Key<?> key(Class<?> type, String name)
-	{
-		if (name == null || name.isEmpty())
-		{
-			name = "default";
-		}
-
-		return Key.get(type, Names.named(name));
-	}
-
-	private Class<?> type(Key<?> key)
-	{
-		TypeLiteral<?> typeLiteral = key.getTypeLiteral();
-
-		if (!typeLiteral.getRawType().equals(typeLiteral.getType()))
-		{
-			throw Exceptions.notYetImplemented();
-		}
-
-		return typeLiteral.getRawType();
-	}
-
-	private Class<?> type(Dependency<?> dependency)
-	{
-		return type(dependency.getKey());
-	}
-
-	private String name(Annotation... annotations)
-	{
-		for (Annotation annotation : annotations)
-		{
-			if (annotation instanceof javax.inject.Named)
-			{
-				return javax.inject.Named.class.cast(annotation).value();
-			}
-
-			if (annotation instanceof com.google.inject.name.Named)
-			{
-				return com.google.inject.name.Named.class.cast(annotation).value();
-			}
-		}
-
-		return "default";
-	}
-
-	private String name(Key<?> key)
-	{
-		Annotation annotation = key.getAnnotation();
-
-		return annotation == null ? null : name(annotation);
 	}
 
 	public static class Entry
