@@ -68,11 +68,6 @@ public class PlexusExtension implements BeforeAllCallback, BeforeEachCallback, A
 
 		walkClassTree(testClass, visitor);
 
-		if (visitor.result.isEmpty())
-		{
-			visitor.result.add(testClass);
-		}
-
 		return visitor.result.toArray(Class<?>[]::new);
 	}
 

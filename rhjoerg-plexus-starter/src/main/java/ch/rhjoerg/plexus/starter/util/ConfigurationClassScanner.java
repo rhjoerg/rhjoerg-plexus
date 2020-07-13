@@ -22,19 +22,10 @@ public class ConfigurationClassScanner
 		for (Class<?> configurationClass : configurationClasses)
 		{
 			List<PlexusPackages> annotations = findAnnotations(PlexusPackages.class, configurationClass);
-			boolean changed = false;
 
 			for (PlexusPackages annotation : annotations)
 			{
-				if (packages.addAll(List.of(annotation.value())))
-				{
-					changed = true;
-				}
-			}
-
-			if (!changed)
-			{
-				packages.add(configurationClass.getPackageName());
+				packages.addAll(List.of(annotation.value()));
 			}
 		}
 
