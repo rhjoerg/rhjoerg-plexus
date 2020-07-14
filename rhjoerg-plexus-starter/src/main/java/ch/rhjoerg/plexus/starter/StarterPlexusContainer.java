@@ -72,6 +72,7 @@ import com.google.inject.name.Names;
 import com.google.inject.util.Providers;
 
 import ch.rhjoerg.commons.tool.ExcludingClassLoader;
+import ch.rhjoerg.plexus.starter.util.ConfigurationClassScanner;
 import ch.rhjoerg.plexus.starter.util.PackageScannerModule;
 
 public class StarterPlexusContainer implements MutablePlexusContainer
@@ -108,7 +109,7 @@ public class StarterPlexusContainer implements MutablePlexusContainer
 
 	private boolean disposing = false;
 
-	public StarterPlexusContainer(StarterPlexusConfiguration configuration)
+	public StarterPlexusContainer(StarterPlexusConfiguration configuration) throws Exception
 	{
 		context = new DefaultContext();
 		context.put(PLEXUS_KEY, this);
@@ -126,11 +127,16 @@ public class StarterPlexusContainer implements MutablePlexusContainer
 
 		setLookupRealm(containerRealm);
 
-		Set<String> packages = configuration.configurationClassScanner().discoverPackages(configuration.configurationClasses());
+		ConfigurationClassScanner configurationClassScanner = configuration.configurationClassScanner();
+		Class<?>[] configurationClasses = configuration.configurationClasses();
+
+		Set<String> packages = configurationClassScanner.discoverPackages(configurationClasses);
+		List<Module> configuredModules = configurationClassScanner.discoverModules(configurationClasses);
 		List<Module> modules = new ArrayList<Module>();
 
 		modules.add(new ContainerModule());
 		modules.add(new PackageScannerModule(containerRealm, packages));
+		modules.addAll(configuredModules);
 		Collections.addAll(modules, configuration.customModules());
 		modules.add(new PlexusBindingModule(plexusBeanManager, List.of()));
 		modules.add(new DefaultsModule());
