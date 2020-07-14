@@ -57,7 +57,18 @@ public class Dependencies
 	{
 		Entry entry = addEntry(Keys.key(type), source);
 
-		InjectionPoint.forConstructorOf(type).getDependencies().forEach(d -> addDependency(entry, d));
+		dependencies(type).forEach(dependency -> addDependency(entry, dependency));
+	}
+
+	private List<Dependency<?>> dependencies(Class<?> type)
+	{
+		List<Dependency<?>> result = new ArrayList<>();
+
+		result.addAll(InjectionPoint.forConstructorOf(type).getDependencies());
+		InjectionPoint.forStaticMethodsAndFields(type).forEach(ip -> result.addAll(ip.getDependencies()));
+		InjectionPoint.forInstanceMethodsAndFields(type).forEach(ip -> result.addAll(ip.getDependencies()));
+
+		return result;
 	}
 
 	private void addComponent(Descriptor desc, URL source) throws Exception
