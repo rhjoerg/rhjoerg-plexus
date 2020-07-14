@@ -2,8 +2,9 @@ package ch.rhjoerg.plexus.starter.test;
 
 import static ch.rhjoerg.commons.reflect.Classes.walkClassTree;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.codehaus.plexus.DefaultPlexusContainer;
 import org.junit.jupiter.api.extension.AfterAllCallback;
@@ -78,7 +79,7 @@ public class PlexusExtension implements BeforeAllCallback, BeforeEachCallback, A
 
 	public static class PlexusTestConfigurationClassVisitor implements ClassVisitor
 	{
-		public final List<Class<?>> result = new ArrayList<>();
+		public final Set<Class<?>> result = new HashSet<>();
 
 		@Override
 		public boolean enterClass(Class<?> type)
