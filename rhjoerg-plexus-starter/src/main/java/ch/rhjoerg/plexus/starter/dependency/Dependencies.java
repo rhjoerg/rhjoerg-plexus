@@ -15,6 +15,7 @@ import org.codehaus.plexus.classworlds.realm.ClassRealm;
 import org.codehaus.plexus.component.annotations.Requirement;
 
 import com.google.inject.Key;
+import com.google.inject.Provider;
 import com.google.inject.spi.Dependency;
 import com.google.inject.spi.InjectionPoint;
 
@@ -25,7 +26,7 @@ import ch.rhjoerg.plexus.starter.dependency.ComponentParser.Descriptor;
 
 public class Dependencies
 {
-	private final static List<Class<?>> OPTIONAL_DEPENDENCIES = List.of(Map.class, List.class, Set.class);
+	private final static List<Class<?>> OPTIONAL_DEPENDENCIES = List.of(Map.class, List.class, Set.class, Provider.class);
 
 	private final PlexusContainer container;
 	private final ClassRealm realm;
